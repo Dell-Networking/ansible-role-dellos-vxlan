@@ -1,0 +1,6 @@
+---
+- hosts: os10host
+  connection: network_cli
+  roles:
+    - Dell-Networking.dellos-vxlan
+

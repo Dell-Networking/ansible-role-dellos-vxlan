@@ -7,8 +7,6 @@ galaxy_info:
   min_ansible_version: 2.2
 
   platforms:
-  - name: Dell OS6
-  - name: Dell OS9
   - name: Dell OS10
 
   galaxy_tags:
@@ -16,7 +14,5 @@ galaxy_info:
     - Dell
     - EMC
     - OS10
-    - OS9
-    - OS6
     - DellEMC
 

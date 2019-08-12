@@ -73,6 +73,9 @@ Role variables
 | ``remote_endpoint.state`` | string: absent,present\* | Removes the remote tunnel endpoint in a VXLAN network if set to absent | dellos10 |
 | ``vxlan_vni.state`` | string: absent,present\* | Removes the VXLAN ID if set to absent   | dellos10 |
 | ``virtual_net.state`` | string: absent,present\* | Removes a virtual network if set to absent | dellos10 |
+| ``vlan_association`` | list | Configures the  vlan association with virtual network  (see ``vlan_association.*``) | dellos10 |
+| ``vlan_association.vlan_id`` | integer | Specifies the VLAN ID    | dellos10 |
+| ``vlan_association.virtual_net`` | integer | Specifies the virtual netwrok id which is to be associated with vlan  | dellos10 |
 
 
 > **NOTE**: Asterisk (\*) denotes the default value if none is specified.
@@ -183,6 +186,10 @@ When *dellos_cfg_generate* is set to true, the variable generates the configurat
                     state: "present"
                 state: "present"
               state: "present" 
+          vlan_association:
+            - vlan_id: 111
+              virtual_net: 111
+
               
 **Simple playbook to configure VXLAN - leaf.yaml**
 

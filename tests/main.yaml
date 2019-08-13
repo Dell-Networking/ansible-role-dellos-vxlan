@@ -90,4 +90,9 @@ dellos_vxlan:
                 state: "present"
             state: "present"
           state: "present" 
+      vlan_association:
+        - vlain_id: 111
+          virtual_net: 111
+        - vlan_id: 222
+          virtual_net: 222
 

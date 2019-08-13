@@ -55,7 +55,11 @@ dellos_vxlan:
                 state: "present"
             state: "present" 
           state: "present"
-  
+      vlan_association:
+        - vlan_id: 888
+          virtual_net: 888
+        - vlan_id: 111
+          virtual_net: 111
 
 ###############################################}
 {% if dellos_vxlan is defined and dellos_vxlan %}
@@ -290,6 +294,20 @@ virtual-network {{ v_net.id }}
          {% endif %} 
        {% endfor %}
     {% endif %}
+  {% endif %}
+  {% if dellos_vxlan.vlan_association is defined and  dellos_vxlan.vlan_association %}
+    {% for vlan in dellos_vxlan.vlan_association %}
+      {% if vlan.vlan_id is defined and vlan.vlan_id %}
+interface vlan{{ vlan.vlan_id }}
+        {% if vlan.virtual_net is defined %}
+          {% if vlan.virtual_net %}
+ virtual-network {{ vlan.virtual_net }}
+          {% else %}
+ no virtual-network
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
   {% endif %}
 {% endif %}
 

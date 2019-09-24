@@ -1,9 +1,7 @@
 #jinja2: trim_blocks: True,lstrip_blocks: True
 {#############################################
-
 #Purpose:
 Configure VXLAN commands for dellos10 Devices
-
 dellos_vxlan:
     anycast_gateway_mac: "00:22:33:44:55:66"
     loopback:
@@ -60,7 +58,6 @@ dellos_vxlan:
           virtual_net: 888
         - vlan_id: 111
           virtual_net: 111
-
 ###############################################}
 {% if dellos_vxlan is defined and dellos_vxlan %}
   {% if dellos_vxlan.anycast_gateway_mac is defined %}
@@ -310,4 +307,3 @@ interface vlan{{ vlan.vlan_id }}
     {% endfor %}
   {% endif %}
 {% endif %}
-

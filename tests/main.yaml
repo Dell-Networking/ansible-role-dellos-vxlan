@@ -95,4 +95,3 @@ dellos_vxlan:
           virtual_net: 111
         - vlan_id: 222
           virtual_net: 222
-

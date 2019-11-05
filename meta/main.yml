@@ -1,9 +1,10 @@
 # Copyright (c) 2019 Dell Inc. or its subsidiaries. All Rights Reserved.
 ---
 galaxy_info:
+  role_name: dellos_vxlan
   author: Dell EMC Networking Engineering
   description: >
-                The dellos-vxlan role facilitates the configuration of nve evpn and virtual network attributes in devices 
+                The dellos_vxlan role facilitates the configuration of nve evpn and virtual network attributes in devices 
                 running Dell EMC Networking Operating Systems.
   license:  Apache 2.0
   min_ansible_version: 2.2

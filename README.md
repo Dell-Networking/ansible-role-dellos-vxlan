@@ -8,7 +8,7 @@ The VXLAN role requires an SSH connection for connectivity to a Dell EMC Network
 Installation
 ------------
 
-    ansible-galaxy install Dell-Networking.dellos-vxlan
+    ansible-galaxy install Dell-Networking.dellos_vxlan
 
 Role variables
 --------------
@@ -101,14 +101,14 @@ Ansible Dell EMC Networking roles require connection information to establish co
 Dependencies
 ------------
 
-The *dellos-vxlan* role is built on modules included in the core Ansible code. These modules were added in Ansible version 2.2.0.
+The *dellos_vxlan* role is built on modules included in the core Ansible code. These modules were added in Ansible version 2.2.0.
 
 Example playbook
 ----------------
 
-This example uses the *dellos-vxlan* role to configure the VXLAN network, source ip address on VXLAN tunnel endpoint and virtual networks. It creates a *hosts* file with the switch details, a *host_vars* file with connection variables and the corresponding role variables.
+This example uses the *dellos_vxlan* role to configure the VXLAN network, source ip address on VXLAN tunnel endpoint and virtual networks. It creates a *hosts* file with the switch details, a *host_vars* file with connection variables and the corresponding role variables.
 
-When *dellos_cfg_generate* is set to true, the variable generates the configuration commands as a .part file in *build_dir* path. By default, the variable is set to false. This example writes a simple playbook that only references the *dellos-vxlan* role. The sample host_vars given below is for dellos10. 
+When *dellos_cfg_generate* is set to true, the variable generates the configuration commands as a .part file in *build_dir* path. By default, the variable is set to false. This example writes a simple playbook that only references the *dellos_vxlan* role. The sample host_vars given below is for dellos10. 
 
 **Sample hosts file**
     
@@ -195,7 +195,7 @@ When *dellos_cfg_generate* is set to true, the variable generates the configurat
 
     - hosts: leaf1
       roles:
-         - Dell-Networking.dellos-vxlan
+         - Dell-Networking.dellos_vxlan
 
 **Run**
 

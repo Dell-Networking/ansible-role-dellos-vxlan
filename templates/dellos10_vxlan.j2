@@ -34,6 +34,21 @@ dellos_vxlan:
               route_target_type: "both"
               state: "present"  
           state: "present"
+      vrf:
+        - name: "test"
+          vni: 1000
+          adv_ipv4:
+            - type: "connected"
+              state: "present"
+            - type: "bgp"
+              state: "present"
+          route_target:
+            - type: "manual"
+              asn_value: "65530:65534"
+              route_target_type: "both"
+              state: "present"
+      rmac: 00:11:11:11:11:11
+      dis_rt_asn: "true"
       state: "present"
     virtual_network:
       untagged_vlan: 1001
@@ -101,7 +116,7 @@ no nve
     {% else %}
 nve
       {% if nve.source_interface is defined %}
-        {% if nve.source_interface %}
+        {% if nve.source_interface >= 0 %}
  source-interface loopback{{ nve.source_interface }}
         {% else %}
  no source-interface 
@@ -154,12 +169,17 @@ nve
 no evpn
     {% else %}
 evpn
-      {% if evpn.autoevi is defined %} 
-        {% if evpn.autoevi == True %}
- auto-evi
+      {% if evpn.rmac is defined %}
+        {% if evpn.rmac %}
+ router-mac {{ evpn.rmac }}
         {% else %}
- no auto-evi
+ no router-mac
         {% endif %}
+      {% endif %}
+      {% if evpn.dis_rt_asn is defined and evpn.dis_rt_asn == "true" %}
+ disable-rt-asn
+      {% else %}
+ no disable-rt-asn
       {% endif %}
       {% if evpn.evi is defined and evpn.evi %}
         {% for evi in evpn.evi %}
@@ -208,6 +228,70 @@ evpn
             {% endif %}
           {% endif %}
         {% endfor %}
+      {% endif %}
+      {% if evpn.vrf is defined %}
+        {% for evpn_vrf in evpn.vrf %}
+          {% if evpn_vrf.name %}
+             vrf  {{ evpn_vrf.name }}
+            {% if evpn_vrf.vni is defined %}
+	      {% if evpn_vrf.vni %}
+             vni {{ evpn_vrf.vni }}
+	      {% else %}
+             no vni
+	      {% endif %}
+            {% endif %}
+	    {% if evpn_vrf.rd is defined %}
+              {% if evpn_vrf.rd %}
+             rd {{ evpn_vrf.rd }}
+	      {% else %}
+             no rd
+	      {% endif %}
+	    {% endif %}
+            {% if evpn_vrf.route_target is defined and evpn_vrf.route_target %}
+              {% for rt in evpn_vrf.route_target %}
+                {% if rt.type is defined and rt.type == "manual" %}
+                  {% if rt.asn_value is defined and rt.asn_value %}
+                    {% if rt.state is defined and rt.state == "absent" %}
+                  no route-target {{ rt.asn_value }}
+                    {% else %}
+                      {% if rt.route_target_type is defined and rt.route_target_type %}
+                  route-target {{ rt.asn_value }} {{ rt.route_target_type }}
+                      {% endif %}
+                    {% endif %}
+                  {% endif %}
+                {% elif rt.type is defined and rt.type == "auto" %}
+                  {% if rt.state is defined and rt.state == "absent" %}
+                 no route-target auto
+                  {% else %}
+                 route-target auto
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+            {% if evpn_vrf.adv_ipv4 is defined and evpn_vrf.adv_ipv4 %}
+              {% for rt in evpn_vrf.adv_ipv4 %}
+                {% if rt.unconfig is defined and rt.unconfig == "true" and rt.type is defined and rt.rmap_name is defined %}
+                  no advertise ipv4 {{ rt.type }} route-map {{ rt.rmap_name }}
+                {% elif rt.type is defined and rt.rmap_name is defined %}
+                  advertise ipv4 {{ rt.type }} route-map {{ rt.rmap_name }}
+                {% elif rt.unconfig is defined and  rt.unconfig == "true" and rt.type is defined %}
+                  no advertise ipv4 {{ rt.type }}
+                {% elif rt.type is defined %}
+                  advertise ipv4 {{ rt.type }}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% else %}
+           no vrf {{ evpn.vrf }}
+      {% endif %}
+      {% if evpn.autoevi is defined %}
+        {% if evpn.autoevi == True %}
+ auto-evi
+        {% else %}
+ no auto-evi
+        {% endif %}
       {% endif %}
     {% endif %}
   {% endif %}

@@ -42,7 +42,21 @@ Role variables
 | ``nve.state`` | string: absent,present\* | Removes the Network Virtualization Edge if set to absent | dellos10 |
 | ``evpn`` | dictionary | Enable the evpn in control plane (see ``evpn.*``)  | dellos10 |
 | ``evpn.autoevi`` | boolean: True, False | Configures auto-evi (No further manual configuration is allowed in auto-EVI mode) | dellos10 |
+| ``evpn.rmac`` | string | Configures router mac address | dellos10 |
 | ``evpn.evi`` | list | Configures EVPN instance (see ``evi.*``)| dellos10 |
+| ``evpn.dis_rt_asn`` | boolean | Enable/Disable AS number usage in route target | dellos10 |
+| ``evpn.vrf`` | dictionary | Enable VRF for EVPN| dellos10 |
+| ``vrf.name`` | string | Configures VRF name | dellos10 |
+| ``vrf.vni`` | integer | Configures vni for the VRF | dellos10 |
+| ``vrf.rd`` | string | Configures RD for the VRF | dellos10 |
+| ``vrf.route_target`` | dictionary | Enable Route Target for the VRF | dellos10 |
+| ``route_target.type`` | string (manual, auto) | Configure Route Target type | dellos10 |
+| ``route_target.asn_value`` | string | Configure AS number | dellos10 |
+| ``route_target.state`` | string (present,absent) | Configure/Unconfigure Route Target | dellos10 |
+| ``route_target.route_target_type`` | string | Configure Route Target type | dellos10 |
+| ``vrf.adv_ipv4`` | dictionary | Enable IPv4 advertisement VRF | dellos10 |
+| ``adv_ipv4.type`` | string | Configure IPv4 advertisement type | dellos10 |
+| ``adv_ipv4.rmap_name`` | string | Configure route map for advertisement | dellos10 |
 | ``evi.id`` | integer | Configures the EVPN instance id (The range is from 1 to 65535) | dellos10 |
 | ``evi.rd`` | string |  Configure the Route  Distinguisher | dellos10 |
 | ``evi.vni`` | dictionary | Configures vni value (see ``vni.*``) | dellos10 |
@@ -161,6 +175,21 @@ When *dellos_cfg_generate* is set to true, the variable generates the configurat
                   route_target_type: "export"
                   state: "present"
               state: "present"
+          vrf:
+            - name: "test"
+              vni: 1000
+              adv_ipv4:
+                - type: "connected"
+                  state: "present"
+                - type: "bgp"
+                  state: "present"
+              route_target:
+                - type: "manual"
+                  asn_value: "65530:65534"
+                  route_target_type: "both"
+                  state: "present"
+          rmac: 00:11:11:11:11:11
+          dis_rt_asn: "true"
           state: "present"      
         virtual_network:
           untagged_vlan: 1001
@@ -186,10 +215,11 @@ When *dellos_cfg_generate* is set to true, the variable generates the configurat
                     state: "present"
                 state: "present"
               state: "present" 
-          vlan_association:
-            - vlan_id: 111
-              virtual_net: 111
-
+        vlan_association:
+          - vlan_id: 888
+            virtual_net: 888
+          - vlan_id: 111
+            virtual_net: 111
               
 **Simple playbook to configure VXLAN - leaf.yaml**
 

@@ -1,9 +1,9 @@
-VXLAN role
+VxLAN role
 ========
 
-This role facilitates the configuration of  virtual extensible LAN (VXLAN)   attributes. It supports the configuration of Virtual Networks, Ethernet Virtual Private Network (evpn) and Network Virtualization Edge (nve). This role is abstracted for dellos10 device.
+This role facilitates the configuration of virtual extensible LAN (VxLAN) attributes. It supports the configuration of virtual networks, Ethernet virtual private network (EVPN) and network virtualization Edge (NVE). This role is abstracted for dellos10 device.
 
-The VXLAN role requires an SSH connection for connectivity to a Dell EMC Networking device. You can use any of the built-in OS connection variables.
+The VxLAN role requires an SSH connection for connectivity to a Dell EMC Networking device. You can use any of the built-in OS connection variables.
 
 Installation
 ------------
@@ -23,73 +23,73 @@ Role variables
 
 | Key        | Type                      | Description                                             | Support               |
 |------------|---------------------------|---------------------------------------------------------|-----------------------|
-| ``anycast_gateway_mac`` | string | Configures an anycast gateway IP address for a VXLAN virtual network | dellos10 |
+| ``anycast_gateway_mac`` | string | Configures an anycast gateway IP address for a VxLAN virtual network | dellos10 |
 | ``loopback`` | dictionary | Configures the loopback interface (see ``loopback.*``) | dellos10 |
-| ``loopback.loopback_id`` | integer | Configures the loopback interface number  0 to 16383 | dellos10 |
+| ``loopback.loopback_id`` | integer | Configures the loopback interface number  (0 to 16383) | dellos10 |
 | ``loopback.description`` | string | Configures the interface description | dellos10 |
-| ``loopback.ip_address`` | string | Configure the ip address | dellos10 |
+| ``loopback.ip_address`` | string | Configure the IP address | dellos10 |
 | ``loopback.state`` | string: absent,present\* | Removes loopback interface if set to absent | dellos10 |
-| ``nve`` | dictionary | Configures Network Virtualization Edge (see ``nve.*``) | dellos10 |
+| ``nve`` | dictionary | Configures network virtualization edge (see ``nve.*``) | dellos10 |
 | ``nve.source_interface`` | integer | Configures source loopback interface | dellos10 |
 | ``nve.controller`` | dictionary | Configures controller (OS10 supports only one controller connection at a time)(see ``controller.*``)  | dellos10 |
-| ``controller.name`` | string: NSX, ovsdb | Configures the nve controller | dellos10 |
-| ``controller.max_backoff`` | integer | Configures max_backoff value (Setting an empty value negates the corresponding configuration) | dellos10 |
-| ``controller.control_cfg`` | list | Configures the controller ip and port (see ``control_cfg.*``) | dellos10 |
-| ``control_cfg.ip_addr`` | string | Configures the controller ip | dellos10 |
+| ``controller.name`` | string: NSX, ovsdb | Configures the NVE controller (see ``nve.*``) | dellos10 |
+| ``controller.max_backoff`` | integer | Configures max_backoff value (setting an empty value negates the corresponding configuration) | dellos10 |
+| ``controller.control_cfg`` | list | Configures the controller IP and port (see ``control_cfg.*``) | dellos10 |
+| ``control_cfg.ip_addr`` | string | Configures the controller IP | dellos10 |
 | ``control_cfg.port`` | integer | Configures the controller port | dellos10 |
-| ``control_cfg.state`` | string: absent,present\* | Removes the controller ip and port configuration if set to absent   | dellos10 |
+| ``control_cfg.state`` | string: absent,present\* | Removes the controller IP and port configuration if set to absent   | dellos10 |
 | ``controller.state`` | string: absent,present\* | Removes the controller if set to absent | dellos10 |
-| ``nve.state`` | string: absent,present\* | Removes the Network Virtualization Edge if set to absent | dellos10 |
-| ``evpn`` | dictionary | Enable the evpn in control plane (see ``evpn.*``)  | dellos10 |
-| ``evpn.autoevi`` | boolean: True, False | Configures auto-evi (No further manual configuration is allowed in auto-EVI mode) | dellos10 |
-| ``evpn.rmac`` | string | Configures router mac address | dellos10 |
+| ``nve.state`` | string: absent,present\* | Removes the network virtualization edge if set to absent (see ``nve.*``) | dellos10 |
+| ``evpn`` | dictionary | Enable the EVPN in control plane (see ``evpn.*``)  | dellos10 |
+| ``evpn.autoevi`` | boolean: True, False | Configures auto-EVI (no further manual configuration is allowed in auto-EVI mode) | dellos10 |
+| ``evpn.rmac`` | string | Configures router MAC address | dellos10 |
 | ``evpn.evi`` | list | Configures EVPN instance (see ``evi.*``)| dellos10 |
-| ``evpn.dis_rt_asn`` | boolean | Enable/Disable AS number usage in route target | dellos10 |
-| ``evpn.vrf`` | dictionary | Enable VRF for EVPN| dellos10 |
+| ``evpn.dis_rt_asn`` | boolean | Enables/disable AS number usage in route target | dellos10 |
+| ``evpn.vrf`` | dictionary | Enable VRF for EVPN | dellos10 |
 | ``vrf.name`` | string | Configures VRF name | dellos10 |
-| ``vrf.vni`` | integer | Configures vni for the VRF | dellos10 |
+| ``vrf.vni`` | integer | Configures VNI for the VRF | dellos10 |
 | ``vrf.rd`` | string | Configures RD for the VRF | dellos10 |
-| ``vrf.route_target`` | dictionary | Enable Route Target for the VRF | dellos10 |
-| ``route_target.type`` | string (manual, auto) | Configure Route Target type | dellos10 |
-| ``route_target.asn_value`` | string | Configure AS number | dellos10 |
-| ``route_target.state`` | string (present,absent) | Configure/Unconfigure Route Target | dellos10 |
-| ``route_target.route_target_type`` | string | Configure Route Target type | dellos10 |
-| ``vrf.adv_ipv4`` | dictionary | Enable IPv4 advertisement VRF | dellos10 |
-| ``adv_ipv4.type`` | string | Configure IPv4 advertisement type | dellos10 |
-| ``adv_ipv4.rmap_name`` | string | Configure route map for advertisement | dellos10 |
-| ``evi.id`` | integer | Configures the EVPN instance id (The range is from 1 to 65535) | dellos10 |
-| ``evi.rd`` | string |  Configure the Route  Distinguisher | dellos10 |
-| ``evi.vni`` | dictionary | Configures vni value (see ``vni.*``) | dellos10 |
-| ``vni.id`` | integer | Configures vni value (You must configure the same VNI value that you configure for the VXLAN virtual network) | dellos10 |
-| ``vni.state`` | string: absent,present\* | Removes the vni if set to absent | dellos10 |
-| ``evi.route_target`` | list | Configures route target (see ``route_target.*``) | dellos10 |
+| ``vrf.route_target`` | dictionary | Enable route target for the VRF | dellos10 |
+| ``route_target.type`` | string (manual, auto) | Configure route target type | dellos10 |
+| ``route_target.asn_value`` | string | Configures AS number | dellos10 |
+| ``route_target.state`` | string (present,absent) | Configures/unconfigures route target | dellos10 |
+| ``route_target.route_target_type`` | string | Configures route target type | dellos10 |
+| ``vrf.adv_ipv4`` | dictionary | Enables IPv4 advertisement VRF | dellos10 |
+| ``adv_ipv4.type`` | string | Configures IPv4 advertisement type | dellos10 |
+| ``adv_ipv4.rmap_name`` | string | Configures route map for advertisement | dellos10 |
+| ``evi.id`` | integer | Configures the EVPN instance ID (1 to 65535) | dellos10 |
+| ``evi.rd`` | string |  Configure the route  distinguisher | dellos10 |
+| ``evi.vni`` | dictionary | Configures VNI value (see ``vni.*``) | dellos10 |
+| ``vni.id`` | integer | Configures VNI value (you must configure the same VNI value that you configure for the VxLAN virtual network) | dellos10 |
+| ``vni.state`` | string: absent,present\* | Removes the VNI if set to absent | dellos10 |
+| ``evi.route_target`` | list | Configures the route target (see ``route_target.*``) | dellos10 |
 | ``route_target.type`` | string: manual,auto  | Configures the route target (auto mode auto-configures an import and export value for EVPN routes) | dellos10 |
-| ``route_target.asn_value`` | string | Configures the route target asn value | dellos10 |
+| ``route_target.asn_value`` | string | Configures the route target ASN value | dellos10 |
 | ``route_target.route_target_type`` | string: import,export,both  | Configures the route target type | dellos10 |
 | ``route_target.state`` | string: absent,present\* | Removes the route target if set to absent  | dellos10 |
-| ``evi.state`` | string: absent,present\*     | Removes EVPN instance id if set to absent  | dellos10 |
+| ``evi.state`` | string: absent,present\*     | Removes EVPN instance ID if set to absent  | dellos10 |
 | ``evpn.state`` | string: absent,present\* | Removes the EVPN configuration if set to absent | dellos10 |
 | ``virtual_network`` | dictionary | Configures the virtual network attributes (see ``virtual_network.*``) | dellos10 |
-| ``virtual_network.untagged_vlan`` | integer  | Configures the  reserved untagged VLAN ID, from 1 to 4093  | dellos10 |
-| ``virtual_network.virtual_net`` | list  | Configures the virtual network attributes for VXLAN tunneling (see ``virtual_net.*``) | dellos10 |
-| ``virtual_net.id`` | integer | Configures a virtual network ( virtual-network ID, from 1 to 65535) | dellos10 |
-| ``virtual_net.description`` | string | Configures the Description for Virtual Network | dellos10 |
-| ``virtual_net.vlt_vlan_id`` | integer | Configures  VLTi VLAN ID | dellos10 |
+| ``virtual_network.untagged_vlan`` | integer  | Configures the  reserved untagged VLAN ID (1 to 4093)  | dellos10 |
+| ``virtual_network.virtual_net`` | list  | Configures the virtual network attributes for VxLAN tunneling (see ``virtual_net.*``) | dellos10 |
+| ``virtual_net.id`` | integer | Configures a virtual network (virtual-network ID; 1 to 65535) | dellos10 |
+| ``virtual_net.description`` | string | Configures the description for virtual network | dellos10 |
+| ``virtual_net.vlt_vlan_id`` | integer | Configures the VLTi VLAN ID | dellos10 |
 | ``virtual_net.member_interface`` | list | Configures the trunk member interface attributes to the virtual network (see ``member_interface.*``) | dellos10 |
-| ``member_interface.ifname`` | string | Configures interface name to provision the virtual network member interface |  dellos10 |
+| ``member_interface.ifname`` | string | Configures the interface name to provision the virtual network member interface |  dellos10 |
 | ``member_interface.type`` | string: tagged,untagged | Configures the type to provision the virtual network member interface |  dellos10 |
 | ``member_interface.vlanid`` | integer | Configures the VLAN ID to provision the virtual network member interface |  dellos10 |
 | ``member_interface.state`` | string: absent,present\* | Removes the virtual network member interface if set to absent  |  dellos10 |
-| ``virtual_net.vxlan_vni`` | dictionary | Configures the  VXLAN attributes to  virtual network (see ``vxlan_vni.*``) | dellos10 |
-| ``vxlan_vni.id`` | integer | Configures the VXLAN ID to a virtual network   | dellos10 |
-| ``vxlan_vni.remote_endpoint`` | list | Configures the IP address of a remote tunnel endpoint in a VXLAN network (see ``remote_endpoint.*``) | dellos10 |
+| ``virtual_net.vxlan_vni`` | dictionary | Configures the  VxLAN attributes to  virtual network (see ``vxlan_vni.*``) | dellos10 |
+| ``vxlan_vni.id`` | integer | Configures the VxLAN ID to a virtual network   | dellos10 |
+| ``vxlan_vni.remote_endpoint`` | list | Configures the IP address of a remote tunnel endpoint in a VxLAN network (see ``remote_endpoint.*``) | dellos10 |
 | ``remote_endpoint.ip`` | string | Configures the IP address of a remote tunnel endpoint (1.1.1.1)  | dellos10 |
-| ``remote_endpoint.state`` | string: absent,present\* | Removes the remote tunnel endpoint in a VXLAN network if set to absent | dellos10 |
+| ``remote_endpoint.state`` | string: absent,present\* | Removes the remote tunnel endpoint in a VxLAN network if set to absent | dellos10 |
 | ``vxlan_vni.state`` | string: absent,present\* | Removes the VXLAN ID if set to absent   | dellos10 |
 | ``virtual_net.state`` | string: absent,present\* | Removes a virtual network if set to absent | dellos10 |
-| ``vlan_association`` | list | Configures the  vlan association with virtual network  (see ``vlan_association.*``) | dellos10 |
-| ``vlan_association.vlan_id`` | integer | Specifies the VLAN ID    | dellos10 |
-| ``vlan_association.virtual_net`` | integer | Specifies the virtual netwrok id which is to be associated with vlan  | dellos10 |
+| ``vlan_association`` | list | Configures the  VLAN association with virtual network (see ``vlan_association.*``) | dellos10 |
+| ``vlan_association.vlan_id`` | integer | Specifies the VLAN ID   | dellos10 |
+| ``vlan_association.virtual_net`` | integer | Specifies the virtual netwrok ID which is to be associated with VLAN  | dellos10 |
 
 
 > **NOTE**: Asterisk (\*) denotes the default value if none is specified.
@@ -120,7 +120,7 @@ The *dellos_vxlan* role is built on modules included in the core Ansible code. T
 Example playbook
 ----------------
 
-This example uses the *dellos_vxlan* role to configure the VXLAN network, source ip address on VXLAN tunnel endpoint and virtual networks. It creates a *hosts* file with the switch details, a *host_vars* file with connection variables and the corresponding role variables.
+This example uses the *dellos_vxlan* role to configure the VxLAN network, source IP address on VxLAN tunnel endpoint and virtual networks. It creates a *hosts* file with the switch details, a *host_vars* file with connection variables, and the corresponding role variables.
 
 When *dellos_cfg_generate* is set to true, the variable generates the configuration commands as a .part file in *build_dir* path. By default, the variable is set to false. This example writes a simple playbook that only references the *dellos_vxlan* role. The sample host_vars given below is for dellos10. 
 

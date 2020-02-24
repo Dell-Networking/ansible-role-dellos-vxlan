@@ -283,8 +283,6 @@ evpn
             {% endif %}
           {% endif %}
         {% endfor %}
-      {% else %}
-           no vrf {{ evpn.vrf }}
       {% endif %}
       {% if evpn.autoevi is defined %}
         {% if evpn.autoevi == True %}
